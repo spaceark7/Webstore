@@ -1,8 +1,8 @@
 import React from 'react'
 import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa'
-const Rating = ({ value, text }) => {
+const Rating = ({ value, text, color }) => {
   return (
-    <div className='Rating' style={{ color: 'gold' }}>
+    <div className='Rating' style={{ color: 'goldenrod' }}>
       <span>
         {value >= 1 ? (
           <FaStar />
@@ -57,5 +57,9 @@ const Rating = ({ value, text }) => {
     </div>
   )
 }
+
+
+
+
 
 export default Rating
