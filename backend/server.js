@@ -11,7 +11,7 @@ dotenv.config()
 
 connectDB()
 
-console.log(process.env.MONGODB_URI)
+console.log(`${process.env.TOKEN_SECRET}`.red.inverse)
 
 const App = express()
 App.get('/', (req, res) => {

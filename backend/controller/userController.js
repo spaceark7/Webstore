@@ -1,5 +1,6 @@
 import User from '../models/userModel.js'
 import asyncHandler from 'express-async-handler'
+import tokenGenerator from '../utils/tokenGenerator.js'
 
 // @desc   auth user & get token
 // @route  POST /api/users/login
@@ -16,7 +17,7 @@ const authUser = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
-      token: null,
+      token: tokenGenerator(user._id),
     })
   } else {
     res.status(401)
@@ -24,4 +25,60 @@ const authUser = asyncHandler(async (req, res) => {
   }
 })
 
-export { authUser }
+
+
+// @desc   register user 
+// @route  POST /api/users/login
+// @access public
+
+const registerUser = asyncHandler(async (req, res) => {
+  const { name, email, password } = req.body
+
+  const userExists = await User.findOne({ email })
+  if(userExists) {
+    res.status(401)
+    throw new Error("User Already Exist, try different email")
+  }
+
+ 
+  const user = await User.create({name, email, password})
+  
+
+  if(user) {
+    res.status(201).json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      isAdmin: user.isAdmin,
+      token: tokenGenerator(user._id),
+    })
+  }
+  else {
+    res.status(400)
+    throw new Error('Invalid user data, cannot Create user')
+  }
+})
+
+// @desc   GET user & get verify token
+// @route  GET /api/users/profile
+// @access private
+
+const getUserProfile = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.user._id)
+
+    if(user) {
+      res.json({
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        isAdmin: user.isAdmin,
+      })
+
+    }
+    else{
+      res.status(404)
+      throw new Error("User Not Found")
+    }
+})
+
+export { authUser, getUserProfile, registerUser }
