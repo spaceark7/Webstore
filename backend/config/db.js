@@ -2,14 +2,11 @@ import mongoose from 'mongoose'
 
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(
-      'mongodb+srv://webstore123:webstore123@webstore.auk2f.mongodb.net/webstore-dev?retryWrites=true&w=majority',
-      {
-        useUnifiedTopology: true,
-        useNewUrlParser: true,
-        useCreateIndex: true,
-      }
-    )
+    const conn = await mongoose.connect(process.env.MONGODB_URI, {
+      useUnifiedTopology: true,
+      useNewUrlParser: true,
+      useCreateIndex: true,
+    })
 
     console.log(process.env.MONGODB_URI)
 
