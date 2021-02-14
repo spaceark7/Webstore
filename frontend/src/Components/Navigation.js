@@ -1,16 +1,25 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Navbar, Nav, Button, Container, NavDropdown } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 
 import { FaShoppingCart, FaSignInAlt } from 'react-icons/fa'
 import { useDispatch, useSelector } from 'react-redux'
+import { logout } from '../actions/userActions'
 
 const Navigation = () => {
+  const dispatch = useDispatch()
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
+  const [user, setUser] = useState({})
+
+  useEffect(() => {
+    setUser(JSON.parse(localStorage.getItem('userInfo')))
+    console.log(user)
+  }, [userLogin, userInfo])
 
   const logoutHandler = () => {
-    console.log('Logout')
+    dispatch(logout())
+    setUser(null)
   }
 
   return (
@@ -28,8 +37,8 @@ const Navigation = () => {
                   <FaShoppingCart className='mx-1' /> Cart
                 </Nav.Link>
               </LinkContainer>
-              {userInfo ? (
-                <NavDropdown title={`Halo, ${userInfo.name}`} id='username'>
+              {user ? (
+                <NavDropdown title={`Halo, ${user.name}`} id='username'>
                   <LinkContainer to='/profile'>
                     <NavDropdown.Item>Profile</NavDropdown.Item>
                   </LinkContainer>
