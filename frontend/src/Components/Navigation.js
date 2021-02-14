@@ -12,11 +12,6 @@ const Navigation = () => {
   const { userInfo } = userLogin
   const [user, setUser] = useState({})
 
-  useEffect(() => {
-    setUser(JSON.parse(localStorage.getItem('userInfo')))
-    console.log(user)
-  }, [userLogin, userInfo])
-
   const logoutHandler = () => {
     dispatch(logout())
     setUser(null)
@@ -37,8 +32,8 @@ const Navigation = () => {
                   <FaShoppingCart className='mx-1' /> Cart
                 </Nav.Link>
               </LinkContainer>
-              {user ? (
-                <NavDropdown title={`Halo, ${user.name}`} id='username'>
+              {userInfo ? (
+                <NavDropdown title={`Halo, ${userInfo.name}`} id='username'>
                   <LinkContainer to='/profile'>
                     <NavDropdown.Item>Profile</NavDropdown.Item>
                   </LinkContainer>
