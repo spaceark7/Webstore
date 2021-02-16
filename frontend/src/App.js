@@ -11,6 +11,7 @@ import RegisterPage from './Components/Pages/RegisterPage.js'
 import ProfilePage from './Components/Pages/ProfilePage.js'
 import ShippingPage from './Components/Pages/ShippingPage.js'
 import PaymentMethodPage from './Components/Pages/PaymentMethodPage.js'
+import PlaceOrderPage from './Components/Pages/PlaceOrderPage.js'
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
             <Route path='/cart/:id?' component={AddToCart} />
             <Route path='/shipping' component={ShippingPage} />
             <Route path='/payment' component={PaymentMethodPage} />
+            <Route path='/placeorder' component={PlaceOrderPage} />
             <Route path='/' exact component={HomePage} />
           </Container>
         </main>
