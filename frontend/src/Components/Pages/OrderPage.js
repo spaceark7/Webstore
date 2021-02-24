@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from 'react'
 import {
   Button,
   Col,
@@ -7,49 +7,83 @@ import {
   Image,
   Card,
   Spinner,
-} from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import CheckOutProcess from "../CheckOutProcess";
-import Messages from "./Messages";
-import { createOrder, getOrderDetails } from "../../actions/orderActions";
+} from 'react-bootstrap'
+import { useDispatch, useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
+import CheckOutProcess from '../CheckOutProcess'
+import Messages from './Messages'
+import {
+  createOrder,
+  getOrderDetails,
+  payOrder,
+} from '../../actions/orderActions'
+import axios from 'axios'
+import { PayPalButton } from 'react-paypal-button-v2'
+import { ORDER_PAY_RESET } from '../../Constant/orderContant'
 
 const OrderPage = ({ match }) => {
-  const dispatch = useDispatch();
-  const cart = useSelector((state) => state.cart);
-  const orderID = match.params.id;
+  const [sdkReady, setSdkReady] = useState(false)
+  const dispatch = useDispatch()
+  const cart = useSelector((state) => state.cart)
+  const orderID = match.params.id
 
-  const orderDetails = useSelector((state) => state.orderDetails);
-  const { loading, error, order } = orderDetails;
+  const orderDetails = useSelector((state) => state.orderDetails)
+  const { loading, error, order } = orderDetails
+
+  const orderPay = useSelector((state) => state.orderPay)
+  const { loading: loadingPay, success: successPay } = orderPay
 
   const addDecimals = (num) => {
-    return (Math.round(num * 100) / 100).toFixed(2);
-  };
+    return (Math.round(num * 100) / 100).toFixed(2)
+  }
 
   if (!loading) {
     order.itemsPrice = order.orderItems
       .reduce((acc, item) => acc + item.price * item.qty, 0)
-      .toFixed(2);
+      .toFixed(2)
   }
 
   useEffect(() => {
-    if (!order || order._id !== orderID) {
-      dispatch(getOrderDetails(orderID));
+    const addPayPalScript = async () => {
+      const { data: clientId } = await axios.get('/api/config/paypal')
+      const script = document.createElement('script')
+      script.type = 'text/javascript'
+      script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}`
+      script.async = true
+      script.onload = () => {
+        setSdkReady(true)
+      }
+
+      document.body.appendChild(script)
+    }
+
+    if (!order || successPay) {
+      dispatch({ type: ORDER_PAY_RESET })
+      dispatch(getOrderDetails(orderID))
+    } else if (!order.isPaid) {
+      if (!window.paypal) {
+        addPayPalScript()
+      }
     }
 
     // eslint-disable-next-line
-  }, [order, orderID]);
+  }, [dispatch, order, orderID, successPay])
+
+  const successHandlePayment = (paymentResult) => {
+    console.log(paymentResult)
+    dispatch(payOrder(orderID, paymentResult))
+  }
 
   return loading ? (
-    "loading"
+    'loading'
   ) : error ? (
-    <Messages variant="danger">{error}</Messages>
+    <Messages variant='danger'>{error}</Messages>
   ) : (
     <>
       <h1>Order {order._id}</h1>
       <Row>
         <Col md={8}>
-          <ListGroup variant="flush">
+          <ListGroup variant='flush'>
             <ListGroup.Item>
               <h2>Shipping</h2>
               <p>
@@ -60,14 +94,14 @@ const OrderPage = ({ match }) => {
               </p>
               <p>
                 <strong>Address: </strong>
-                {order.shippingAddress.address}, {order.shippingAddress.city}{" "}
-                {order.shippingAddress.postalCode},{" "}
+                {order.shippingAddress.address}, {order.shippingAddress.city}{' '}
+                {order.shippingAddress.postalCode},{' '}
                 {order.shippingAddress.country}
               </p>
               {order.isDelivered ? (
-                <Messages variant="info">Package Is On The way!</Messages>
+                <Messages variant='info'>Package Is On The way!</Messages>
               ) : (
-                <Messages variant="warning">
+                <Messages variant='warning'>
                   Hold on! We'll Sent Your Package After You Complete The
                   Payment
                 </Messages>
@@ -81,18 +115,18 @@ const OrderPage = ({ match }) => {
                 {order.paymentMethod}
               </p>
               {order.isPaid ? (
-                <Messages variant="success">Paid on {order.paidAt}</Messages>
+                <Messages variant='success'>Paid on {order.paidAt}</Messages>
               ) : (
-                <Messages variant="warning">Not Paid</Messages>
+                <Messages variant='warning'>Not Paid</Messages>
               )}
             </ListGroup.Item>
 
             <ListGroup.Item>
               <h2>Order Items</h2>
               {order.orderItems.length === 0 ? (
-                <Messages variant="danger">Oops! Your Cart is empty</Messages>
+                <Messages variant='danger'>Oops! Your Cart is empty</Messages>
               ) : (
-                <ListGroup variant="flush">
+                <ListGroup variant='flush'>
                   {order.orderItems.map((item, index) => (
                     <ListGroup.Item key={index}>
                       <Row>
@@ -106,15 +140,15 @@ const OrderPage = ({ match }) => {
                         </Col>
                         <Col>
                           <Link
-                            target="_blank"
-                            rel="noreferrer"
+                            target='_blank'
+                            rel='noreferrer'
                             to={`/product/${item.product}`}
                           >
                             {item.name}
                           </Link>
                         </Col>
                         <Col md={4}>
-                          {item.qty} x {item.price} ={" "}
+                          {item.qty} x {item.price} ={' '}
                           {Number(item.qty * item.price).toFixed(2)}
                         </Col>
                       </Row>
@@ -127,7 +161,7 @@ const OrderPage = ({ match }) => {
         </Col>
         <Col md={4}>
           <Card>
-            <ListGroup variant="flush">
+            <ListGroup variant='flush'>
               <ListGroup.Item>
                 <h2>Order Smummary</h2>
               </ListGroup.Item>
@@ -156,14 +190,28 @@ const OrderPage = ({ match }) => {
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
-                {error && <Messages variant="danger">{error}</Messages>}
+                {error && <Messages variant='danger'>{error}</Messages>}
               </ListGroup.Item>
+
+              {!order.isPaid && (
+                <ListGroup.Item>
+                  {loadingPay && 'Loading'}
+                  {!sdkReady ? (
+                    'Loading SDK'
+                  ) : (
+                    <PayPalButton
+                      amount={order.totalPrice}
+                      onSuccess={successHandlePayment}
+                    />
+                  )}
+                </ListGroup.Item>
+              )}
             </ListGroup>
           </Card>
         </Col>
       </Row>
     </>
-  );
-};
+  )
+}
 
-export default OrderPage;
+export default OrderPage
