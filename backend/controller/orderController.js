@@ -1,5 +1,5 @@
-import Order from "../models/orderModel.js";
-import asyncHandler from "express-async-handler";
+import Order from '../models/orderModel.js'
+import asyncHandler from 'express-async-handler'
 
 // @desc   Pcreate order item
 // @route  POST / api/orders
@@ -14,12 +14,12 @@ const addOrderItems = asyncHandler(async (req, res) => {
     taxPrice,
     shippingPrice,
     totalPrice,
-  } = req.body;
+  } = req.body
 
   if (orderItems && orderItems.length === 0) {
-    res.status(400);
-    throw new Error("No Order Items");
-    return;
+    res.status(400)
+    throw new Error('No Order Items')
+    return
   } else {
     const order = new Order({
       orderItems,
@@ -30,12 +30,12 @@ const addOrderItems = asyncHandler(async (req, res) => {
       taxPrice,
       shippingPrice,
       totalPrice,
-    });
+    })
 
-    const createOrder = await order.save();
-    res.status(201).json({ createOrder });
+    const createOrder = await order.save()
+    res.status(201).json({ createOrder })
   }
-});
+})
 
 // @desc   Pcreate order item
 // @route  POST / api/orders
@@ -43,28 +43,28 @@ const addOrderItems = asyncHandler(async (req, res) => {
 
 const getOrderById = asyncHandler(async (req, res) => {
   const order = await Order.findById(req.params.id).populate(
-    "user",
-    "name email"
-  );
+    'user',
+    'name email'
+  )
 
   if (order) {
-    res.json(order);
+    res.json(order)
   } else {
-    res.status(404);
-    throw new Error("Order Not Found!");
+    res.status(404)
+    throw new Error('Order Not Found!')
   }
-});
+})
 
 // @desc   update order to paid
 // @route  PUT /api/orders/:id/pay
 // @access private
 
 const updateOrderToPaid = asyncHandler(async (req, res) => {
-  const order = await Order.findById(req.params.id);
+  const order = await Order.findById(req.params.id)
 
   if (order) {
-    order.isPaid = true;
-    order.PaidAt - Date.now();
+    order.isPaid = true
+    order.PaidAt - Date.now()
 
     // The Response come from API Gateway
     order.paymentResult = {
@@ -72,14 +72,23 @@ const updateOrderToPaid = asyncHandler(async (req, res) => {
       status: req.body.status,
       update_time: req.body.update_time,
       email_address: req.body.payer.email_address,
-    };
+    }
 
-    const updatedOrder = order.save();
-    res.json(updatedOrder);
+    const updatedOrder = order.save()
+    res.json(updatedOrder)
   } else {
-    res.status(404);
-    throw new Error("Payment is Failed. Something Went Wrong");
+    res.status(404)
+    throw new Error('Payment is Failed. Something Went Wrong')
   }
-});
+})
 
-export { addOrderItems, getOrderById, updateOrderToPaid };
+// @desc   create order request
+// @route  GET /api/orders/myorders
+// @access private
+
+const getOrders = asyncHandler(async (req, res) => {
+  const orders = await Order.find({ user: req.user._id })
+  res.json(orders)
+})
+
+export { addOrderItems, getOrderById, updateOrderToPaid, getOrders }

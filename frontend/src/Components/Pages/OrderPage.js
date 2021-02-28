@@ -115,7 +115,7 @@ const OrderPage = ({ match }) => {
                 {order.paymentMethod}
               </p>
               {order.isPaid ? (
-                <Messages variant='success'>Paid on {order.paidAt}</Messages>
+                <Messages variant='success'>Paid on {order.createdAt}</Messages>
               ) : (
                 <Messages variant='warning'>Not Paid</Messages>
               )}
