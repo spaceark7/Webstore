@@ -1,42 +1,43 @@
-import React from 'react'
-import { Container, Nav } from 'react-bootstrap'
-import Footer from './Components/Footer.js'
-import Navigation from './Components/Navigation.js'
-import HomePage from './Components/Pages/HomePage'
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
-import ProductPage from './Components/Pages/ProductPage'
-import AddToCart from './Components/Pages/AddToCartPage.js'
-import LoginPage from './Components/Pages/LoginPage.js'
-import RegisterPage from './Components/Pages/RegisterPage.js'
-import ProfilePage from './Components/Pages/ProfilePage.js'
-import ShippingPage from './Components/Pages/ShippingPage.js'
-import PaymentMethodPage from './Components/Pages/PaymentMethodPage.js'
-import PlaceOrderPage from './Components/Pages/PlaceOrderPage.js'
-import OrderPage from './Components/Pages/OrderPage.js'
-
+import React from "react";
+import { Container, Nav } from "react-bootstrap";
+import Footer from "./Components/Footer.js";
+import Navigation from "./Components/Navigation.js";
+import HomePage from "./Components/Pages/HomePage";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import ProductPage from "./Components/Pages/ProductPage";
+import AddToCart from "./Components/Pages/AddToCartPage.js";
+import LoginPage from "./Components/Pages/LoginPage.js";
+import RegisterPage from "./Components/Pages/RegisterPage.js";
+import ProfilePage from "./Components/Pages/ProfilePage.js";
+import ShippingPage from "./Components/Pages/ShippingPage.js";
+import PaymentMethodPage from "./Components/Pages/PaymentMethodPage.js";
+import PlaceOrderPage from "./Components/Pages/PlaceOrderPage.js";
+import OrderPage from "./Components/Pages/OrderPage.js";
+import UserListPage from "./Components/Pages/UsersLIstPage";
 function App() {
   return (
     <Router>
-      <div className='App'>
+      <div className="App">
         <Navigation />
-        <main className='h-100'>
+        <main className="h-100">
           <Container>
-            <Route path='/login' component={LoginPage} />
-            <Route path='/profile' component={ProfilePage} />
-            <Route path='/register' component={RegisterPage} />
-            <Route path='/product/:id' component={ProductPage} />
-            <Route path='/cart/:id?' component={AddToCart} />
-            <Route path='/shipping' component={ShippingPage} />
-            <Route path='/payment' component={PaymentMethodPage} />
-            <Route path='/placeorder' component={PlaceOrderPage} />
-            <Route path='/orders/:id' component={OrderPage} />
-            <Route path='/' exact component={HomePage} />
+            <Route path="/login" component={LoginPage} />
+            <Route path="/profile" component={ProfilePage} />
+            <Route path="/register" component={RegisterPage} />
+            <Route path="/product/:id" component={ProductPage} />
+            <Route path="/cart/:id?" component={AddToCart} />
+            <Route path="/shipping" component={ShippingPage} />
+            <Route path="/payment" component={PaymentMethodPage} />
+            <Route path="/placeorder" component={PlaceOrderPage} />
+            <Route path="/orders/:id" component={OrderPage} />
+            <Route path="/userlist" component={UserListPage} />
+            <Route path="/" exact component={HomePage} />
           </Container>
         </main>
         <Footer />
       </div>
     </Router>
-  )
+  );
 }
 
-export default App
+export default App;
