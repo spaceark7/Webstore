@@ -5,6 +5,9 @@ import {
   registerUser,
   updateUserProfile,
   getUsers,
+  deleteUser,
+  getUsersById,
+  updateUserById,
 } from "../controller/userController.js";
 import { Protect, admin } from "../middleWare/userAuthMiddleware.js";
 const router = express.Router();
@@ -18,5 +21,11 @@ router
   .route("/profile")
   .get(Protect, getUserProfile)
   .put(Protect, updateUserProfile);
+
+router
+  .route("/:id")
+  .delete(Protect, admin, deleteUser)
+  .get(Protect, admin, getUsersById)
+  .put(Protect, admin, updateUserById);
 
 export default router;
