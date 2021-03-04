@@ -58,7 +58,7 @@ const initialState = {
     shippingAddress: shippingAddressFromStorage,
     paymentMethod: paymentMEthodFromStorage,
   },
-  userLogin: { userInfo: userInfoFromStorage },
+  userLogin: { userInfo: userInfoFromStorage }, // It Will Affect @profile after u open admin menu for edit user
 };
 const middleWare = [thunk];
 const Store = createStore(

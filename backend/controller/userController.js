@@ -149,7 +149,7 @@ const getUsersById = asyncHandler(async (req, res) => {
 // @access private/admin
 
 const updateUserById = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id);
+  const user = await User.findById(req.params.id).select("-password");
 
   if (user) {
     user.name = req.body.name || user.name;

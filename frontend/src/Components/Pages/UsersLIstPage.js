@@ -62,7 +62,7 @@ const UserListPage = ({ history }) => {
                   )}
                 </td>
                 <td>
-                  <LinkContainer to={`/users/${user._id}/edit`}>
+                  <LinkContainer to={`/admin/user/${user._id}/edit`}>
                     <Button variant="primary" className="btn-sm">
                       <FaEdit />
                     </Button>

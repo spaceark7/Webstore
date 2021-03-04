@@ -124,16 +124,14 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
       userLogin: { userInfo },
     } = getState();
 
-    console.log(userInfo.token);
     const config = {
       headers: {
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
 
-    const { data } = await axios.get(`/api/users/profile`, config);
+    const { data } = await axios.get(`/api/users/${id}`, config);
 
-    console.log("After fething data userdetails", data);
     dispatch({
       type: USER_DETAILS_SUCCESS,
       payload: data,
@@ -233,7 +231,7 @@ export const deleteUser = (id) => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await axios.delete(`/api/users/${id}`, config);
+    await axios.delete(`/api/users/${id}`, config);
 
     dispatch({
       type: USER_DELETE_SUCCESS,
