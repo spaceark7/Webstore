@@ -53,10 +53,10 @@ const Navigation = () => {
                   <LinkContainer to="/admin/userlist">
                     <NavDropdown.Item>Users</NavDropdown.Item>
                   </LinkContainer>
-                  <LinkContainer to="/productlist">
+                  <LinkContainer to="/admin/productlist">
                     <NavDropdown.Item>Product List</NavDropdown.Item>
                   </LinkContainer>
-                  <LinkContainer to="/orderlist">
+                  <LinkContainer to="/admin/orderlist">
                     <NavDropdown.Item>Order List</NavDropdown.Item>
                   </LinkContainer>
                   <NavDropdown.Item onClick={logoutHandler}>

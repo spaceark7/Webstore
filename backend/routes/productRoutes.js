@@ -1,21 +1,19 @@
-import express from 'express'
+import express from "express";
 import {
   getProductById,
   getProducts,
-} from '../controller/productsController.js'
+  deleteProductById,
+} from "../controller/productsController.js";
 
-const router = express.Router()
+import { Protect, admin } from "../middleWare/userAuthMiddleware.js";
 
-// @desc   fetch all product
-// @route  GET / api/products
-// @access public
+const router = express.Router();
 
-router.route('/').get(getProducts)
+router.route("/").get(getProducts);
 
-// @desc   fetch all product
-// @route  GET / api/products/:id
-// @access public
+router
+  .route("/:id")
+  .get(getProductById)
+  .delete(Protect, admin, deleteProductById);
 
-router.route('/:id').get(getProductById)
-
-export default router
+export default router;

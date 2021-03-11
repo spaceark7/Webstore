@@ -6,6 +6,7 @@ import ProductCard from "../Pages/ProductCard";
 import { listProducts } from "../../actions/productActions";
 import { useDispatch, useSelector } from "react-redux";
 import Messages from "./Messages";
+import Loader from "./Loader";
 
 const HomePage = () => {
   const dispatch = useDispatch();
@@ -20,10 +21,7 @@ const HomePage = () => {
     <>
       <h1>Latest Products!</h1>
       {loading ? (
-        <div className="row d-flex w-100 h-100vh flex-column align-items-center justify-content-center">
-          <Spinner role="status" animation="border"></Spinner>{" "}
-          <p>Calling for the Virtual Employee to come :)</p>
-        </div>
+        <Loader />
       ) : error ? (
         <Messages variant="danger">{error}</Messages>
       ) : (
