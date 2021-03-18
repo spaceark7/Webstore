@@ -64,7 +64,7 @@ const updateOrderToPaid = asyncHandler(async (req, res) => {
 
   if (order) {
     order.isPaid = true
-    order.PaidAt - Date.now()
+    order.paidAt - Date.now()
 
     // The Response come from API Gateway
     order.paymentResult = {
@@ -91,4 +91,19 @@ const getOrders = asyncHandler(async (req, res) => {
   res.json(orders)
 })
 
-export { addOrderItems, getOrderById, updateOrderToPaid, getOrders }
+// @desc   get All Orders
+// @route  GET /api/orders
+// @access private/admin
+
+const getAllOrders = asyncHandler(async (req, res) => {
+  const orders = await Order.find({}).populate('user', 'id name')
+  res.json(orders)
+})
+
+export {
+  addOrderItems,
+  getOrderById,
+  updateOrderToPaid,
+  getOrders,
+  getAllOrders,
+}

@@ -3,6 +3,7 @@ import { Form, Button } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import Message from './Messages'
 import { useDispatch, useSelector } from 'react-redux'
+import axios from 'axios'
 
 import FormContainer from './FormContainer'
 import Loader from './Loader'
@@ -19,6 +20,7 @@ const ProductEditPage = ({ match, history }) => {
   const [category, setCategory] = useState('')
   const [image, setImage] = useState('')
   const [countStock, setCountStock] = useState(0)
+  const [uploading, setUploading] = useState(false)
 
   const dispatch = useDispatch()
   const productDetails = useSelector((state) => state.productDetails)
@@ -50,6 +52,28 @@ const ProductEditPage = ({ match, history }) => {
       }
     }
   }, [dispatch, history, productId, product, successUpdate])
+
+  const uploadFileHandler = async (e) => {
+    const file = e.target.files[0]
+    const formData = new FormData()
+    formData.append('image', file)
+    setUploading(true)
+    console.log('the file is: ', file)
+
+    try {
+      const config = {
+        headers: {
+          'Content-type': 'multipart/form-data',
+        },
+      }
+
+      const { data } = await axios.post('/api/upload', formData, config)
+      setImage(data)
+      setUploading(false)
+    } catch (error) {
+      setUploading(false)
+    }
+  }
 
   const submitHandler = (e) => {
     e.preventDefault()
@@ -138,10 +162,17 @@ const ProductEditPage = ({ match, history }) => {
               <Form.Label>Image</Form.Label>
               <Form.Control
                 type='text'
-                placeholder='Enter IMage'
+                placeholder='Enter Image'
                 value={image}
                 onChange={(e) => setImage(e.target.value)}
               ></Form.Control>
+              <Form.File
+                id='image-file'
+                label='Choose File'
+                custom
+                onClick={uploadFileHandler}
+              ></Form.File>
+              {uploading && <Loader />}
             </Form.Group>
 
             <Form.Group controlId='countstock'>
