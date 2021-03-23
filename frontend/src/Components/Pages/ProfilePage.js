@@ -34,7 +34,7 @@ const ProfilePage = ({ history }) => {
     if (!userInfo) {
       history.push('/login')
     } else {
-      if (!user || !user.name) {
+      if (!user || !user.name || !orders) {
         dispatch(getUserDetails('profile'))
         dispatch(listMyOrder())
       } else {
@@ -42,7 +42,7 @@ const ProfilePage = ({ history }) => {
         setEmail(user.email)
       }
     }
-  }, [dispatch, history, userInfo, user])
+  }, [dispatch, history, userInfo, user, orders])
 
   const submitHandler = (e) => {
     e.preventDefault()
@@ -147,7 +147,7 @@ const ProfilePage = ({ history }) => {
                   </td>
                   <td>
                     {order.isDelivered ? (
-                      order.deliveredAt.substring(0, 10)
+                      order.deliveredAt
                     ) : (
                       <IoCloseCircle style={{ color: 'red' }} />
                     )}

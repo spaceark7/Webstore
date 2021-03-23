@@ -6,7 +6,7 @@ import { LinkContainer } from 'react-router-bootstrap'
 import { deleteUser, listUsers } from '../../actions/userActions'
 import { FaCheck, FaEdit, FaTimes, FaTrash } from 'react-icons/fa'
 import { Table, Button } from 'react-bootstrap'
-import { listOrderS } from '../../actions/orderActions'
+import { listOrders } from '../../actions/orderActions'
 const OrderListPage = ({ history }) => {
   const dispatch = useDispatch()
   const orderList = useSelector((state) => state.orderList)
@@ -16,7 +16,7 @@ const OrderListPage = ({ history }) => {
 
   useEffect(() => {
     if (userInfo && userInfo.isAdmin) {
-      dispatch(listOrderS())
+      dispatch(listOrders())
     } else {
       history.push('/login')
     }
@@ -64,7 +64,7 @@ const OrderListPage = ({ history }) => {
                   )}
                 </td>
                 <td>
-                  <LinkContainer to={`/admin/order/${order._id}`}>
+                  <LinkContainer to={`/orders/${order._id}`}>
                     <Button variant='primary' className='btn-sm'>
                       Details
                     </Button>
