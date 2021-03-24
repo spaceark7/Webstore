@@ -1,6 +1,7 @@
 import express from 'express'
 import dotenv from 'dotenv'
 import colors from 'colors'
+import morgan from 'morgan'
 import { notFound, errorHandler } from './middleWare/errorMiddleware.js'
 import connectDB from './config/db.js'
 import path from 'path'
@@ -17,6 +18,10 @@ connectDB()
 console.log(`${process.env.TOKEN_SECRET}`.red.inverse)
 
 const App = express()
+
+if (process.env.NODE_ENV === 'development') {
+  App.use(morgan('dev'))
+}
 App.get('/', (req, res) => {
   res.send(`<p>Ho ho ho Server is Running ...<p>`)
 })
