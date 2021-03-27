@@ -8,13 +8,13 @@ import { useDispatch, useSelector } from 'react-redux'
 import Messages from './Messages'
 import Loader from './Loader'
 import Paginate from '../Paginate'
+import ProductCarousel from '../ProductCarousel'
 
 const HomePage = ({ match }) => {
   const keyword = match.params.keyword
   const pageNumber = match.params.pageNumber || 1
   const dispatch = useDispatch()
   const productList = useSelector((state) => state.productList)
-
   const { loading, products, error, pages, page } = productList
 
   useEffect(() => {
@@ -22,6 +22,7 @@ const HomePage = ({ match }) => {
   }, [dispatch, keyword, pageNumber])
   return (
     <>
+      {!keyword && <ProductCarousel />}
       <h1>Latest Products!</h1>
       {loading ? (
         <Loader />
