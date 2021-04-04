@@ -9,6 +9,7 @@ import Messages from './Messages'
 import Loader from './Loader'
 import Paginate from '../Paginate'
 import ProductCarousel from '../ProductCarousel'
+import Meta from '../Meta'
 
 const HomePage = ({ match }) => {
   const keyword = match.params.keyword
@@ -22,6 +23,7 @@ const HomePage = ({ match }) => {
   }, [dispatch, keyword, pageNumber])
   return (
     <>
+      <Meta />
       {!keyword && <ProductCarousel />}
       <h1>Latest Products!</h1>
       {loading ? (

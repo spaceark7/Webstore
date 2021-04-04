@@ -22,6 +22,7 @@ import {
 } from '../../actions/productActions.js'
 import { addToCart } from '../../actions/cartActions'
 import { PRODUCT_CREATE_REVIEW_RESET } from '../../Constant/productConstant.js'
+import Meta from '../Meta.js'
 
 const ProductPage = ({ history, match }) => {
   const [qty, setQty] = useState(1)
@@ -85,6 +86,11 @@ const ProductPage = ({ history, match }) => {
         <Messages variant='danger'>{error}</Messages>
       ) : (
         <>
+          <Meta
+            title={`${product.name} | Webstore Product`}
+            description={product.desc}
+            keywords={product.brand}
+          />
           <Row>
             <Col md={6}>
               <Image src={product.image} alt={product.name} fluid />
